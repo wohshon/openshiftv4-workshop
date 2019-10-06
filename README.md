@@ -17,3 +17,5 @@ oc new-app --name=dev-guide osevg/workshopper -e CONTENT_URL_PREFIX="https://raw
 
 oc expose svc/dev-guide
 ```
+
+Use the route generated to access the labs instructions
