@@ -6,7 +6,8 @@ Developer workshop for OCP 4.1
 
 List down the modules you want to include in the lab instructions (see `_modules.yml` for example)
 
-Update the url placeholders in `_module_groups.yml` and `_modules.yml`
+Update the url placeholders in `_module_groups.yml` and `_modules.yml`, check in.
+
 
 ```
 oc new-project labs
