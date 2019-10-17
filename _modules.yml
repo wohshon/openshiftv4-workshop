@@ -22,9 +22,9 @@ config:
       desc: URL for Red Hat portal oc binary download
       value: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/
     - name: LINUX_CLI_URL
-      value: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-install-linux-4.2.0.tar.gz
+      value: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.2.0.tar.gz
     - name: CLI_FILENAME
-      value: openshift-install-linux-4.2.0.tar.gz
+      value: openshift-client-linux-4.2.0.tar.gz
     - name: WIN_CLI_URL
       value: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-4.2/openshift-client-windows-4.2.0.zip
   

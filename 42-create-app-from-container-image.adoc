@@ -10,32 +10,78 @@ how to create an application from an existing docker image using Web UI.
 
 IMPORTANT: Please replace *Username* with your username
 
-- login to web UI via {{CONSOLE_ADDRESS}}
+- login to web UI via {{CONSOLE_ADDRESS}} (You may want to do a `right-click` to open the web console in a new tab or window and keep this page open)
 - Use the same username and password that assigned to you
-- On the left-hand side menu, select `Home` and then select `Project`
+
+=== Switching to Developer View
+
+- On the left-hand side menu, select the `Administrator` dropdown menu and switch to `Developer`.
+
+image::ocp4-role-dropdown.png[image]
+
+- This will bring you to the `Developer` View.
+
+image::ocp4-dev-home.png[image]
+
+- We will now create a `Project`, a `Project` is like a workspace for you to group your resources.
+- On the left-hand side menu, under `Advance`, select `Project`
 - Click `Create Project`
-- Enter *web-terminal-Username* as name of the project. The display name and description is optional.
 
-image::create-project.png[image]
+image::ocp4-dev-home-project.png[image]
 
-- Click `Create`
+- Enter *web-terminal-<Username>* as name of the project, e.g. web-terminal-user02. The display name and description is optional.
+
+image::ocp4-dev-create-project.png[image]
+
+- You will be led to the `Project Overview' page.`
+
+image::ocp4-dev-create-project.png[image]
+
 
 === Deploy an Image
 
-- Click `Deploy Image`, or in the top-right click the *Add* drop-down menu, then select `Deploy Image`
+- There are various ways to deploy a workload on OpenShift Container Platform: Via source codes, binaries or directly deploying an image. We will look at deploying an image directly.
+
+- Click on the `+Add`, item on the left-hand side menu, you will be presented with the different options to deploy your image
+- Choose the `Container Image` option. (Typically the 2nd item from the left)
+
+image::ocp4-dev-add.png[image]
+
+- You will be led ot the `Deploy Image` page
+
+image::ocp4-dev-deploy-image1.png[image]
+
+
 - Enter `quay.io/openshiftlabs/workshop-terminal:2.4.0` in the `Image Name` box,
   noting that there's no `http://`, enter exactly as shown here,
   without the quotes
 - Select the magnifying glass icon to the right of the box
 - Use the default `Name` for the deployment
-- Scroll down a bit and provide an environment variable.
-- Add `OC_VERSION` and `4.1` as `Environment Variable` section at the bottom on the page.
 
-image::ocp4-deploy-image.png[image]
+image::ocp4-dev-deploy-image2.png[image]
 
-- Click `Deploy`
-- On the left-hand side menu, select `Workload` --> `Deployments Configs`
-- Click onto the `workshop-terminal` to see the deployment details here
+- Scroll further down, under the `Advanced Options`, you will see 
+  - Checkbox for `Create a route to the application`, leave this box checked, a route provides an ingress point for external traffic to access the container services.
+  - You will also see a line of text that lets you access further advanced options
+
+image::ocp4-dev-deploy-image-3.png[image]
+
+- Click on the `Deployment Configuration` hyperlink on the line of text.
+- Add `OC_VERSION` and `4.2` in the  `Environment Variable` section
+
+image::ocp4-dev-deploy-image3.png[image]
+
+- Click `Create` to start deploying your image.
+
+- You will be led to the topology page where you can see the deployment details.
+- Click on the icon to pull out a side panel for more information.
+
+image::ocp4-dev-deploy-image-topology.png[image]
+
+- Once the icon shows a dark blue circle, the deployment is completed
+
+image::ocp4-dev-deploy-image-route.png[image]
+
 
 image::ocp4-dc.png[image]
 
