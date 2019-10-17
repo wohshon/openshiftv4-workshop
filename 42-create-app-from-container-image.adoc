@@ -35,7 +35,7 @@ image::ocp4-dev-create-project.png[image]
 
 - You will be led to the `Project Overview' page.`
 
-image::ocp4-dev-create-project.png[image]
+image::ocp4-dev-project-home.png[image]
 
 
 === Deploy an Image
