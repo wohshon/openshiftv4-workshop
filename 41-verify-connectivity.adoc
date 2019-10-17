@@ -11,7 +11,7 @@ presented with the page to select the authentication providers.
 
 image::login-providers.png[image]
 
-- Click `htpasswd`
+- Click `workshop_htpasswd_provider`
 
 image::ocp4-login.png[image]
 
@@ -20,5 +20,8 @@ image::ocp4-login.png[image]
 image::ocp4-home.png[image]
 
 NOTE: If you login as regular user, you will not see any project when logging in the first time.
+
+image::ocp4-home-basicuser.png[image]
+
 
 Congratulations!! You now ready for more fun work!

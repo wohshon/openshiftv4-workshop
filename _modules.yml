@@ -5,7 +5,7 @@ config:
       value: openshift
     - name: CONSOLE_ADDRESS
       desc: HTTP address of the OpenShift console
-      value: http://console-openshift-console.apps.cluster-sgp-06e3.sgp-06e3.example.opentlc.com/
+      value: https://console-openshift-console.apps.cluster-sgp-f244.sgp-f244.example.opentlc.com/
     - name: APPS_ADDRESS
       desc: HTTP address suffix of apps deployed on OpenShift
       value: apps.cluster-sgp-06e3.sgp-06e3.example.opentlc.com
@@ -14,7 +14,7 @@ config:
       value: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/
     - name: API_URL
       desc: URL to API server
-      value: https://api.cluster-sgp-06e3.sgp-06e3.example.opentlc.com:6443/
+      value: https://api.cluster-sgp-f244.sgp-f244.example.opentlc.com:6443/
     - name: NEXUS_URL
       desc: URL to Nexus repository
       value: http://nexus-workshop.apps.cluster-farmers-b621.farmers-b621.open.redhat.com/repository/maven-public/
@@ -22,9 +22,12 @@ config:
       desc: URL for Red Hat portal oc binary download
       value: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/
     - name: LINUX_CLI_URL
-      value: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.1.18/openshift-install-linux-4.1.18.tar.gz
+      value: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-install-linux-4.2.0.tar.gz
     - name: CLI_FILENAME
-      value: openshift-install-linux-4.1.18.tar.gz
+      value: openshift-install-linux-4.2.0.tar.gz
+    - name: WIN_CLI_URL
+      value: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-4.2/openshift-client-windows-4.2.0.zip
+  
 modules:
   0-setting-up-client-tools:
     name: Set up Client Tools
