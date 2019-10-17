@@ -12,7 +12,7 @@ Update the url placeholders in `_module_groups.yml` and `_modules.yml`, check in
 ```
 oc new-project labs
 
-oc new-app --name=dev-guide osevg/workshopper -e CONTENT_URL_PREFIX="https://raw.githubusercontent.com/wohshon/openshiftv4-workshop/master" -e WORKSHOPS_URLS="https://raw.githubusercontent.com/wohshon/openshiftv4-workshop/master/_module_groups.yml"
+oc new-app --name=dev-guide osevg/workshopper -e CONTENT_URL_PREFIX="https://raw.githubusercontent.com/wohshon/openshiftv4-workshop/4.2" -e WORKSHOPS_URLS="https://raw.githubusercontent.com/wohshon/openshiftv4-workshop/4.2/_module_groups.yml"
 
 
 oc expose svc/dev-guide
