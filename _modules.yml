@@ -23,6 +23,8 @@ config:
       value: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/
     - name: LINUX_CLI_URL
       value: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.1.18/openshift-install-linux-4.1.18.tar.gz
+    - name: CLI_FILENAME
+      value: openshift-install-linux-4.1.18.tar.gz
 modules:
   0-setting-up-client-tools:
     name: Set up Client Tools
