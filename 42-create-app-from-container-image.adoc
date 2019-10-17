@@ -78,49 +78,29 @@ image::ocp4-dev-deploy-image3.png[image]
 
 image::ocp4-dev-deploy-image-topology.png[image]
 
-- Once the icon shows a dark blue circle, the deployment is completed
+- You can click on the `Pod name` to look at the Pod information in detail
+  - feel explore the various tabs (logs, events etc)
+ 
+image::ocp4-dev-pod.png[image]
 
-image::ocp4-dev-deploy-image-route.png[image]
-
-
-image::ocp4-dc.png[image]
-
-- click the tab `Pods` to watch the deployment to complete
-
-image::ocp4-terminal.png[image]
-
-- Navigate to `Home` --> `Events` to check status on each events.
-
-Events in OpenShift Container Platform are modeled based on events that happen
+- On the left-hand side menu, under `Advanced / Events` you can access the events of the Pod.
+- Events in OpenShift Container Platform are modeled based on events that happen
 to API objects in an OpenShift Container Platform cluster. Events allow OpenShift
 Container Platform to record information about real-world events in a resource-
 agnostic manner. For more information, please see
-https://docs.openshift.com/container-platform/3.11/security/monitoring.html#security-monitoring-events.
 
-== Create route
+image::ocp4-dev-deploy-image-events.png[image]
 
-Next we need to create a route so we can access this application from the outside of OpenShift (i.e. from the internet).
 
-- Navigate to `Networking` --> `Routes`
-- Click `Create Route` in the top-left
-- Enter `workshop-terminal` for the name of the route, leave the hostname and path the default
-- Select `workshop-terminal` from the list of services in the `Service` menu
-- Select the only port in the `Target Port` drop down (should be port 10080 --> 10080), like this:
-
-image::ocp4-route.png[image]
-
-- Click `Create` at the bottom and it will create the route.
-- You will now be presented with a pane that shows the overview of the route:
-
-image::ocp4-route-details.png[image]
+- Once the icon on the Topology page shows a dark blue circle, the deployment is completed
+- You can click on the `Open URL` icon to access the url / or Route of the application
+image::ocp4-dev-deploy-image-route.png[image]
 
 
 === Accessing the terminal
 
-- In the top right hand side of the route details page, you will see the `LOCATION`
-which will be the routable URL that will provide access to our workshop terminal.
-- Click on the link under `LOCATION` and you will see the in-browser terminal
-session that we can use (if preferred, or mandated due to connectivity issues):
+- The application we just deployed is a web based terminal. 
+- We will be downloading the OpenShift CLI  here and use it to run the lab
 
 image::run-oc-terminal.png[image]
 
