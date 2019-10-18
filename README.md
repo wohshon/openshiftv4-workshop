@@ -19,3 +19,82 @@ oc expose svc/dev-guide
 ```
 
 Use the route generated to access the labs instructions
+
+## Steps to add user for your lab using Htpasswd 
+
+```
+
+    export NumUsers=3
+    export password=xxxx
+    for value in $( eval echo {1..$NumUsers} ) 
+    do
+        if [ $value -eq 1 ];
+        then
+            echo $value=1;
+            htpasswd -c -B -b users.htpasswd user0$value $password
+        else
+            if [ $value -lt 10 ]
+            then
+                echo creating user0$value;
+                htpasswd -b users.htpasswd user0$value $password
+            else
+                echo creating user$value;
+                htpasswd -b users.htpasswd user$value $password
+            fi;
+        fi;
+    done
+
+
+    for value in $( eval echo {1..$NumUsers} )
+        do
+            if [ $value -lt 10 ]
+            then
+                uname=user0$value
+            else
+                uname=user$value
+            fi;
+                cat > $uname.yaml <<EOF
+                {
+                    "apiVersion": "user.openshift.io/v1",
+                    "groups": null,
+                    "identities": [
+                        "workshop_htpasswd_provider:$uname"
+                    ],
+                    "kind": "User",
+                    "metadata": {
+                        "name": "$uname"
+                    }
+                }
+EOF
+        oc create -f $uname.yaml
+        done
+
+
+
+
+
+
+for value in $( eval echo {1..$NumUsers} )
+    do
+        if [ $value -lt 10 ]
+        then
+            uname=user0$value
+        else
+            uname=user$value
+        fi;
+        oc adm policy add-cluster-role-to-user basic-user $uname
+done
+
+oc create secret generic workshop-htpass-secret --from-file=htpasswd=./users.htpasswd -n openshift-config
+
+//TODO, patch command to append to the Oauth Object
+
+    -  htpasswd:
+        fileData:
+          name: workshop-htpasswd-secret
+      login: true
+      mappingMethod: claim
+      name: workshop_htpasswd_provider
+      type: HTPasswd
+
+```
