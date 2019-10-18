@@ -12,25 +12,45 @@ IMPORTANT: Please replace *Username* with the username assigned to you in
 the commands below.
 
 For this exercise, we will be using an already running application. We
-will be using the `buildimage-Username` that you created in the
+will be using the `buildimage-<Username>` that you created in the
 previous labs. Make sure you are switched to that project by using the
 `oc project` command.
 
 - login to web UI via {{CONSOLE_ADDRESS}}
 - Use the same username and password that assigned to you
-- Navigate to `Projects`
-- Click onto the `buildimage-Username`
+- Go to the `Developer` view if you are not there
+
+image::ocp4-role-dropdown.png[image]
+
+
+- Navigate to `Advanced` -> `Projects`
+
+image::ocp4-dev-project-list.png[image]
+
+- Click onto the `buildimage-<Username>`
 
 
 === View the deployment config
 
+Deployment configurations are resources in Openshift which defines how the workload will be deployed. e.g. deployment strategies (rolling or recreate), triggers to response to events for auto deployment; number of instances to be deployed.
+
 Take a look at the `deploymentConfig` (or `dc`) of the `hello`
 application
 
-- Navigate to `Workloads` --> Deployment Configs
-- Click onto `hello` the name of the dc
-- Click `YAML` tab
+- From the `Project Overview` tab, Navigate to `Workloads`
 
+image::ocp4-dev-project-workload-hello.png[image]
+
+- Click onto `hello`, the name of the dc
+- This will pull out a side panel with detailed information of the `DeploymentConfig` and the `Pod` it has deployed. 
+
+image::ocp4-dev-project-workload-hello-1.png[image]
+
+- Click on the name of the dc, `hello`, you will be brought to the DeploymentConfig page.
+image::oc4-dev-dc-hello.png[image]
+
+- Click `YAML` tab
+- You will be able to see the definition of DeploymentConfig.
 ....
 kind: DeploymentConfig
 apiVersion: apps.openshift.io/v1
@@ -38,13 +58,13 @@ metadata:
   annotations:
     openshift.io/generated-by: OpenShiftNewApp
   selfLink: >-
-    /apis/apps.openshift.io/v1/namespaces/buildimage-user01/deploymentconfigs/hello
-  resourceVersion: '260459'
+    /apis/apps.openshift.io/v1/namespaces/buildimage-user02/deploymentconfigs/hello
+  resourceVersion: '565632'
   name: hello
-  uid: b3533c38-81e7-11e9-93c7-0a580a820019
-  creationTimestamp: '2019-05-29T07:59:35Z'
+  uid: 574fbbd7-f0ec-11e9-845a-0a580a81004c
+  creationTimestamp: '2019-10-17T14:42:27Z'
   generation: 2
-  namespace: buildimage-user01
+  namespace: buildimage-user02
   labels:
     app: hello
 spec:
@@ -67,10 +87,10 @@ spec:
           - hello
         from:
           kind: ImageStreamTag
-          namespace: buildimage-user01
+          namespace: buildimage-user02
           name: 'hello:latest'
         lastTriggeredImage: >-
-          image-registry.openshift-image-registry.svc:5000/buildimage-user01/hello@sha256:21ff2dd47fd6ac3e351e69ef4d052fa9008c7ff655eb6f256e6efbb634cbe718
+          image-registry.openshift-image-registry.svc:5000/buildimage-user02/hello@sha256:7fa25519425d41d4c68cc8e021907d08ff11d01275eb52f8805f1149faf7a5c4
   replicas: 1
   revisionHistoryLimit: 10
   test: false
@@ -89,7 +109,7 @@ spec:
       containers:
         - name: hello
           image: >-
-            image-registry.openshift-image-registry.svc:5000/buildimage-user01/hello@sha256:21ff2dd47fd6ac3e351e69ef4d052fa9008c7ff655eb6f256e6efbb634cbe718
+            image-registry.openshift-image-registry.svc:5000/buildimage-user02/hello@sha256:7fa25519425d41d4c68cc8e021907d08ff11d01275eb52f8805f1149faf7a5c4
           ports:
             - containerPort: 8080
               protocol: TCP
@@ -115,17 +135,18 @@ status:
   conditions:
     - type: Available
       status: 'True'
-      lastUpdateTime: '2019-05-29T08:01:05Z'
-      lastTransitionTime: '2019-05-29T08:01:05Z'
+      lastUpdateTime: '2019-10-17T15:53:33Z'
+      lastTransitionTime: '2019-10-17T15:53:33Z'
       message: Deployment config has minimum availability.
     - type: Progressing
       status: 'True'
-      lastUpdateTime: '2019-05-29T08:01:05Z'
-      lastTransitionTime: '2019-05-29T08:01:05Z'
+      lastUpdateTime: '2019-10-17T15:53:33Z'
+      lastTransitionTime: '2019-10-17T15:53:16Z'
       reason: NewReplicationControllerAvailable
       message: replication controller "hello-1" successfully rolled out
   replicas: 1
   readyReplicas: 1
+
 ....
 
 Note that the `replicas:` is set to `1`. This tells OpenShift that when
@@ -135,11 +156,17 @@ The `Replication Controller` mirrors this configuration initially; the
 `Replication Controller` (or `rc`) will ensure that there is always the
 set number of instances always running.
 
-To view the `rc` for your application first get the current pod running.
+Optional: If you are interested to view the `rc` for your application,
 
-- Navigate to `Workloads` --> `Pods`
-- Let us view the `rc` on this build.
-- Navigate to `Workloads` --> `Replication Controllers`
+- Navigate back to `Advanced` --> `Projects`, `Workload` tab
+- Click on the `1 of 1 pods` link at the right side of the `dc`
+- It will bring you to the `rc` page.
+
+Additionally, if you want to access any of the resources for the project, you can always use the `Search` function, instead of trying to remember where to navigate to
+
+- Navigate to `Advanced` --> `Search`
+
+image::ocp4-dev-search.png[image[]]
 
 NOTE: You can change the number of replicas in `DeploymentConfig` or
 the `ReplicationController`.
@@ -154,30 +181,41 @@ setting.
 
 === Scale Application
 
-To scale your application we will edit the `deploymentConfig` to 3.
+To scale up your application we use the the web console
 
-- Navigate to `Workloads` --> `Deployment Configs`
-- Click onto `hello` Deployment Configs
+- Navigate to `Advanced` --> `Projects`
+- Click onto `hello` dc to pull out the side menu.
 
-image::scale-overview.png[image]
+image::ocp4-dev-project-workload-hello-1.png[image]
 
-- Click the `pencil` icon under `DESIRED COUNT`
+- On the 'donut' icon that represents the number of `Pods` that is running, click on the up arrow 2 time to scale up the pods to 3 instances.
 
-image::scale-up.png[image]
+image::ocp4-dev-scaleup-1.png[image]
 
-- Click `+` to increase to `3`
-- Click `Save`
+- The icon will show the progress of the scaling, light blue represents `Pods` that are still in process of being started, dark represents those that are ready.
 
-image::scale-3pods-overview.png[image]
+image::ocp4-dev-scaleup-2.png[image]
 
-- Wait for all 3 pods are available
-- Click `Pods`
-- you will see that there are 3 pods running now
+=== Scaling Down
 
-image::scale-3pods.png[image]
+- You can chose to scale down back to 1 `pod` via the down arrow.
+- Alternatively, you can use the command line 
 
-NOTES: You can also scale up and down from updating the deployment config.
+....
+[~] $ oc project buildimage-user02
+Already on project "buildimage-user02" on server "https://api.cluster-sgp-f244.sgp-f244.example.opentlc.com:6443".
+[~] $ oc scale dc/hello --replicas=1
+~] $ oc get pods
+NAME             READY     STATUS        RESTARTS   AGE
 
+hello-1-deploy   0/1       Completed     0          10h
+hello-1-m44gb    1/1       Terminating   0          8m19s
+hello-1-rb7j5    1/1       Running       0          10h
+hello-1-rjc5w    1/1       Terminating   0          8m19s
+hello-1-build    0/1       Completed     0          10h
+....
+
+You can verify on the web console only 1 Pod is running
 
 === Idling the application
 
@@ -185,28 +223,34 @@ Run the following command to find the available endpoints
 
 ....
 [~] $ oc get endpoints
-NAME    ENDPOINTS                                            AGE
-hello   10.128.2.30:8080,10.129.2.47:8080,10.131.0.33:8080   23m
+NAME      ENDPOINTS          AGE
+hello     10.131.0.87:8080   11h
 ....
 
-Note that the name of the endpoints is `hello` and there are three ips
-addresses for the three pods.
+Note that the name of the endpoints is `hello` and there is an ips
+addresse for the pod that is running.
 
 Run the `oc idle endpoints/hello` command to idle the application
 
 ....
 [~] $ oc idle endpoints/hello
-WARNING: idling when network policies are in place may cause connections to bypass network policy entirely
-The service "buildimage-user01/hello" has been marked as idled
-The service will unidle DeploymentConfig "buildimage-user01/hello" to 3 replicas once it receives traffic
-DeploymentConfig "buildimage-user01/hello" has been idled
+The service "buildimage-user02/hello" has been marked as idled
+The service will unidle DeploymentConfig "buildimage-user02/hello" to 1 replicas once it receives traffic
+DeploymentConfig "buildimage-user02/hello" has been idled
+[~] $ oc get pods
+NAME             READY     STATUS        RESTARTS   AGE
+hello-1-deploy   0/1       Completed     0          10h
+hello-1-rb7j5    1/1       Terminating   0          10h
+hello-1-build    0/1       Completed     0          10h....
 ....
 
-- Go back to the webconsole. You will notice that the pods show up as
-idled.
-- Navigate to `Workloads` --> `Pods`
 
-image::idle-pod.png[image]
+- Go back to the webconsole. You will notice that the pod show up as
+idled.
+- Navigate to `Advanced` --> `Projects`
+- Click onto `hello` dc to pull out the side menu.
+
+image::ocp4-dev-idle.png.png[image]
 
 At this point the application is idled, the pods are not running and no
 resources are being used by the application. This doesn't mean that the
@@ -214,28 +258,14 @@ application is deleted. The current state is just saved that's all.
 
 === Reactivate your application
 
-- Navigate to `Networking` --> `Routes`
-- Now click on the application route URL under `LOCATION`
+- Navigate to `Topology` on the left hand side menu
+- Now click on the `open url` icon (the one that has a little arrow in a box) to access the url.
 
 Note that it takes a little while for the application to respond. This
 is because pods are spinning up again. You can notice that in the web
 console.
 
-In a little while the output comes up and your application would be up
-with 3 pods.
-
 So, as soon as the user accesses the application, it comes up!!!
-
-=== Scaling Down
-
-Scaling down is the same procedure as scaling up.
-
-- Navigate to `Workloads` --> `Deployment Configs`
-- Click on to the DC `hello`
-- Click `pencil` icon under `DESIRED COUNT`
-- Click `-` twice and down to 1
-- Click `Save`
-- Now, you only have 1 pod running
 
 Congratulations!! In this exercise you have learned about scaling and
 how to scale up/down your application on OpenShift!
