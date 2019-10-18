@@ -5,15 +5,28 @@
 
 In this exercise we will deploy a Java application
 
+
+=== Logging in
+
+- Console URL: {{CONSOLE_ADDRESS}}
+- Accept the warning for self sign certificates (if prompted)
+
+image::login-providers.png[image]
+
+- You will be asked to choose a authentication provider
+- Click `workshop_htpasswd_provider`
+
+image::ocp4-login.png[image]
+
+- Proceed to login with the username and password that were provided to you and you should hit the OpenShift console home page
+
 === Create Project
 IMPORTANT: Please replace *Username* with your username
 
-- login to web UI via {{CONSOLE_ADDRESS}}
-- Click `htpasswd`
-- Use the same username and password that assigned to you
+- Once Login, 
 - On the left-hand side menu, select `Home` and then select `Project`
 - Click `Create Project`
-- Enter *pets-Username* as name of the project. The display name and description is optional.
+- Enter *pets-<Username>* as name of the project. The display name and description is optional.
 
 image::create-project.png[image]
 

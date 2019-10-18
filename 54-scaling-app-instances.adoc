@@ -6,7 +6,7 @@ In this exercise we will learn how to scale our application. OpenShift
 has the capability to scale your application and make sure that many
 instances are always running.
 
-=== Switch to an existing project
+=== Logging in
 
 IMPORTANT: Please replace *Username* with the username assigned to you in
 the commands below.
@@ -16,8 +16,20 @@ will be using the `buildimage-<Username>` that you created in the
 previous labs. Make sure you are switched to that project by using the
 `oc project` command.
 
-- login to web UI via {{CONSOLE_ADDRESS}}
-- Use the same username and password that assigned to you
+- Console URL: {{CONSOLE_ADDRESS}}
+- Accept the warning for self sign certificates (if prompted)
+
+image::login-providers.png[image]
+
+- You will be asked to choose a authentication provider
+- Click `workshop_htpasswd_provider`
+
+image::ocp4-login.png[image]
+
+- Proceed to login with the username and password that were provided to you and you should hit the OpenShift console home page
+
+=== Switch to an existing project
+- After logging in
 - Go to the `Developer` view if you are not there
 
 image::ocp4-role-dropdown.png[image]

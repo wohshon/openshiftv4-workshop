@@ -36,20 +36,26 @@ unauthenticated registry while it is still available.
   * Click to `OpenShift Secret`
   image::ocp4-registry-token.png[image]
 
-  * Download the secret yaml file to your local filesystem (save this later for this lab)
-  * If you are using the browser based Terminal, you need to copy the contents of the secret yaml file and create the yaml file in your Terminal.
-    * `$ nano secret.yaml`
-    * You will see a editor for the file. Copy the contents from your secret yaml file, Hit `Crtl-Shift-V` in the editor to paste the contents in.
-    * `Crtl-X` to save the file, when prompted, enter `Y` to confirm, Hit `Enter` to confirm the filename. 
-    * This should exit the editor and you can do a `cat secret.yaml` to confirm the file has been safe correctly
 
-  image::ocp4-nano.png[image]
-=== Create a project
+
+=== Logging in
 
 IMPORTANT: Please replace *Username* with your username. It should be all lowercase and no spaces.
 
-- login to web UI via {{CONSOLE_ADDRESS}}
-- Use the same username and password that assigned to you
+- Console URL: {{CONSOLE_ADDRESS}}
+- Accept the warning for self sign certificates (if prompted)
+
+image::login-providers.png[image]
+
+- You will be asked to choose a authentication provider
+- Click `workshop_htpasswd_provider`
+
+image::ocp4-login.png[image]
+
+- Proceed to login with the username and password that were provided to you and you should hit the OpenShift console home page
+
+=== Create a project
+- After logging in, 
 - On the left-hand side menu, select `Home` and then select `Project`
 - Click `Create Project`
 - Enter *buildimage-<Username>* e.g. *buildImage-user01* as `Name` of the project. The display name and description is optional.
@@ -99,7 +105,14 @@ an application, and ready to be consume.
 
 NOTE: If you are using the web terminal, you will have to create a file with the
 same content of the secret file in your web terminal.
+You can reference the following steps if you are not familiar with a Linux CLI environment
 
+    * `$ nano secret.yaml`
+    * You will see a editor for the file. Copy the contents from your secret yaml file, Hit `Crtl-Shift-V` in the editor to paste the contents in.
+    * `Crtl-X` to save the file, when prompted, enter `Y` to confirm, Hit `Enter` to confirm the filename. 
+    * This should exit the editor and you can do a `cat secret.yaml` to confirm the file has been safe correctly
+
+  image::ocp4-nano.png[image]
 ....
 $ oc project buildimage-Username
 $ oc create -f my-service-account-pull-secret.yaml

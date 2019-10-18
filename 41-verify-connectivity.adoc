@@ -6,11 +6,11 @@
 Next, let's login to the web-console and ensure that it's working as expected.
 
 - Console URL: {{CONSOLE_ADDRESS}}
-- Click `Advance` and Click `proceed...` link on the browser, you should be
-presented with the page to select the authentication providers.
+- Accept the warning for self sign certificates (if prompted)
 
 image::login-providers.png[image]
 
+- You will be asked to choose a authentication provider
 - Click `workshop_htpasswd_provider`
 
 image::ocp4-login.png[image]

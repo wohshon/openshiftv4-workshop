@@ -6,12 +6,22 @@
 In this lab you will learn how to create a new project on OpenShift and
 how to create an application from an existing docker image using Web UI.
 
-=== Add a new project
+=== Logging in 
 
 IMPORTANT: Please replace *Username* with your username
 
 - login to web UI via {{CONSOLE_ADDRESS}} (You may want to do a `right-click` to open the web console in a new tab or window and keep this page open)
-- Use the same username and password that assigned to you
+
+- Accept the warning for self sign certificates (if prompted)
+
+image::login-providers.png[image]
+
+- You will be asked to choose a authentication provider
+- Click `workshop_htpasswd_provider`
+
+image::ocp4-login.png[image]
+
+- Proceed to login with the username and password that were provided to you and you should hit the OpenShift console home page
 
 === Switching to Developer View
 
@@ -22,6 +32,8 @@ image::ocp4-role-dropdown.png[image]
 - This will bring you to the `Developer` View.
 
 image::ocp4-dev-home.png[image]
+
+=== Add a new project
 
 - We will now create a `Project`, a `Project` is like a workspace for you to group your resources.
 - On the left-hand side menu, under `Advance`, select `Project`
