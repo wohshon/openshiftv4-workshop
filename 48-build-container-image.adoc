@@ -115,6 +115,8 @@ You can reference the following steps if you are not familiar with a Linux CLI e
 
 
 image::ocp4-nano.png[image]
+
+
 ....
 $ oc project buildimage-Username
 $ oc create -f my-service-account-pull-secret.yaml
