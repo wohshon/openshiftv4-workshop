@@ -107,12 +107,14 @@ NOTE: If you are using the web terminal, you will have to create a file with the
 same content of the secret file in your web terminal.
 You can reference the following steps if you are not familiar with a Linux CLI environment
 
-    * `$ nano secret.yaml`
-    * You will see a editor for the file. Copy the contents from your secret yaml file, Hit `Crtl-Shift-V` in the editor to paste the contents in.
-    * `Crtl-X` to save the file, when prompted, enter `Y` to confirm, Hit `Enter` to confirm the filename. 
-    * This should exit the editor and you can do a `cat secret.yaml` to confirm the file has been safe correctly
+  $ nano secret.yaml`
 
-  image::ocp4-nano.png[image]
+  * You will see a editor for the file. Copy the contents from your secret yaml file, Hit `Crtl-Shift-V` in the editor to paste the contents in.
+  * `Crtl-X` to save the file, when prompted, enter `Y` to confirm, Hit `Enter` to confirm the filename. 
+  * This should exit the editor and you can do a `cat secret.yaml` to confirm the file has been safe correctly
+
+
+image::ocp4-nano.png[image]
 ....
 $ oc project buildimage-Username
 $ oc create -f my-service-account-pull-secret.yaml
