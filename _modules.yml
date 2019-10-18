@@ -47,3 +47,6 @@ modules:
     name: Extensions to OpenShift using OperatorHub
   43-exploring-the-cluster:
     name: Exploring the Cluster
+  44-scaling-an-openshift4-cluster:
+    name: Scaling OpenShift4 Cluster
+
