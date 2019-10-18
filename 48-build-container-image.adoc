@@ -120,9 +120,12 @@ $ oc project buildimage-Username
 $ oc create -f my-service-account-pull-secret.yaml
 ....
 
-- Links that secret to your project's builder service account. Your secret name may be different from the one listed.
+* Link that secret to your project's builder service account. Your secret name may be different from the one listed.
+
+- run ```oc secrets link builder <secret name>``` as shown in the example below
 
 ....
+
 [~] $ oc get secrets
 NAME                              TYPE                                  DATA
 AGE
