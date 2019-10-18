@@ -28,49 +28,115 @@ IMPORTANT: Please replace *Username* with your username
 - Click `Create Project`
 - Enter *pets-<Username>* as name of the project. The display name and description is optional.
 
-image::create-project.png[image]
+image::ocp4-dev-project-pets.png[image]
 
 - Click `Create`
 
 === Developer Catalog
 
-- Navigate to `Catalog` --> `Developer Catalog`
-- Click onto `Red Hat OpenJDK 8`
+- Click on the `+Add`, item on the left-hand side menu, you will be presented with the different options to deploy your image
+- Choose the `From Catalog` option. 
 
-image::openjdk.png[image]
+image::ocp4-dev-add.png[image]
 
-- Click `Create Application`
+
+- On the Catalog page, type in `JDK' into the Search box.
+- It should return 2 catalog items. This represents the builder container images we will use to deploy our java applications on. 
+- The Catalog can also host container images that are ready to be deployed, allowing users to self-service if they need to access a workload.
+
+- Choose the `Red Hat Open JDK 8` option.
+
+image::ocp4-dev-cat-jdk.png[image]
+
+- Click on `Create Application`
+
+image::ocp4-dev-rh-openjdk-1.png[image]
+
+- On the next page, `Create Source-to-image Application` , you will be able to deploy your application via the `Source to Image` (or `s2i`) method.
+`s2i` provides a way for OpenShift to build your application based on source codes or binanries (e.g. jar files), using common frameworks (cake, springboot, expressjs). OpenShift will provide `builder images` that assembles your application codes and dependecies; create and deploy a new image containing your application.
+
+
+image::ocp4-dev-rh-openjdk-2.png[image]
+
+- On this page, change the JDK version to 8 (the sample source code we are using are not tested on JDK11)
+
+image::ocp4-dev-rh-openjdk-3.png[image]
+
 - Enter the following
-  * Name: petclinic
+  * Name and Application Name: petclinic
   * Git repository: https://github.com/spring-projects/spring-petclinic.git
   * check `Create route`
 
-image::deploy-java.png[image]
+image::ocp4-dev-rh-openjdk-4.png[image]
 
 - Click `Create`
-- Navigate `Builds` --> `Builds`
-- Click `petclinic-1`
-- Click `Logs`
-- Wait for the following from the log
+- You will be directed to the `Topology` page where you can view the progress of the deployment
+
+image::ocp4-dev-rh-openjdk-5.png[image]
+
+- At this stage, OpenShift is in the process of building the java application:
+  - pulling the source codes from the git repo we provided
+  - packaging the application
+  - creating a new image and pushing it to the container registry
+  - deploy the image
+
+- You can examine the build process related resources
+- On the left hand menu, click on `Build`
+- It will show the `BuildConfig` which defines configuration and properties related to building the image.
+image::ocp4-dev-rh-openjdk-build-1.png[image]
+
+- Click on `petclinic` and go to the `Build` tab, it will bring you to the actual build instance
+- If you build the application multiple times, it will show up as different `builds` 
+image::ocp4-dev-rh-openjdk-build-2.png[image]
+
+- Click on `petclinic-1` , it will allows you to examine the details of the build, like looking at the logs.
+image::ocp4-dev-rh-openjdk-build-3.png[image]
 
 ```
-Pushing image image-registry.openshift-image-registry.svc:5000/testme2/petclinic:latest ...
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 05:01 min
+[INFO] Finished at: 2019-10-18T03:31:49Z
+[INFO] Final Memory: 95M/379M
+[INFO] ------------------------------------------------------------------------
+[WARNING] The requested profile "openshift" could not be activated because it does not exist.
+INFO Copying deployments from target to /deployments...
+'/tmp/src/target/spring-petclinic-2.1.0.BUILD-SNAPSHOT.jar' -> '/deployments/spring-petclinic-2.1.0.BUILD-SNAPSHOT.jar'
+time="2019-10-18T03:31:49Z" level=warning msg="pkg/chroot: error unmounting \"/tmp/buildah040958673/mnt/rootfs\": error checking if \"/tmp/buildah040958673/mnt/rootfs/sys/fs/cgroup/perf_event\" is mounted: no such file or directory"
+time="2019-10-18T03:31:49Z" level=warning msg="pkg/bind: error unmounting \"/tmp/buildah040958673/mnt/rootfs\": error checking if \"/tmp/buildah040958673/mnt/rootfs/sys/fs/cgroup/perf_event\" is mounted: no such file or directory"
+STEP 9: CMD /usr/local/s2i/run
+STEP 10: COMMIT temp.builder.openshift.io/pets-user02/petclinic-1:ce7f83b7
 Getting image source signatures
-Copying blob sha256:038b3dff993dc48f9a8b616ddb0e5a05bca1ab44787d8006ce82c5f2b2018e12
-Copying blob sha256:76608b6b9d54251299c5d3be69fdf53e05f97a3735bbcd5889c30ebb78608428
-Copying blob sha256:f4e561752acba40ba739e700e3b3277b8fe23eee951a5d2dfde7e7e762a3d156
-Copying blob sha256:3c81a5d20855a6cef8b997d709410e047e2839b5ad113f4c34d25e9fae9e3beb
-Copying config sha256:f2c1a1fb1c992cfa18d70a6276a5e90e67906b920979b7aeab0c22b64791274e
+Copying blob sha256:e10ae1eb4f450b747303a918e08c2fc37ad9965f5f14b364fff6b94b0c187374
+Copying blob sha256:b77d33d4cee2c0a0b2131e78ca94dc1a7ac9b4817ac7f8a0456ae68d3fb89883
+Copying blob sha256:2bfffa99cdb5bae074b4c5e94f4ff4eab9afc0e7b4130be208e76e95711a4e43
+Copying blob sha256:90af21d9f802756a424d4e074b2173681cc6b8e6e871c3fd80dd716576a40d45
+Copying config sha256:e656a4500e47bac63cd9336b6b81f58169ca8b2d445a1de1ca301630d8525048
 Writing manifest to image destination
 Storing signatures
-Successfully pushed //image-registry.openshift-image-registry.svc:5000/testme2/petclinic:latest@sha256:49a1758bfc58cd4815a705575fc6e0cf271c264ae8327018e8a03412e44cc9c1
+e656a4500e47bac63cd9336b6b81f58169ca8b2d445a1de1ca301630d8525048
+
+Pushing image image-registry.openshift-image-registry.svc:5000/pets-user02/petclinic:latest ...
+Getting image source signatures
+Copying blob sha256:90af21d9f802756a424d4e074b2173681cc6b8e6e871c3fd80dd716576a40d45
+Copying blob sha256:ebb6f9f5a86f545f3089e00644d627ac4efa1caa2bf80524a27d2aabe13621e4
+Copying blob sha256:c9281c141a1bfec06e291d2ad29bfdedfd10a99d583fc0f48d3c26723ebe0761
+Copying blob sha256:31114e120ca0c7dc51e01721c5a689a614edb6c86de11301d503c72be1540c79
+Copying config sha256:e656a4500e47bac63cd9336b6b81f58169ca8b2d445a1de1ca301630d8525048
+Writing manifest to image destination
+Storing signatures
+Successfully pushed image-registry.openshift-image-registry.svc:5000/pets-user02/petclinic@sha256:6e34cf89d347ba3f71305746813104a2c6182784646645e34298d1c52b207400
 Push successful
 ```
-- Navigate to `Networking` --> `Routes`
-- Click on to `petclinic`
-- Click the link under `LOCATION`
 
-image::javaapp.png[image]
+
+- Once the bulid is done, return to the `Topology` page.
+- You can access the app via the `route` (open url)
+
+image::ocp4-dev-pet-topology.png[image]
+
+image::ocp4-pet.png[image]
 
 Congratulations!! You are now running a Java application on
 OpenShift.
