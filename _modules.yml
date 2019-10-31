@@ -29,10 +29,8 @@ config:
       value: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-4.2/openshift-client-windows-4.2.0.zip
   
 modules:
-  0-setting-up-client-tools:
-    name: Set up Client Tools
   41-verify-connectivity:
-    name: Verify Connectivity
+    name: Initial Setup and Verify Connectivity 
   42-create-app-from-container-image:
     name: Create an App using Container image
   48-build-container-image:
