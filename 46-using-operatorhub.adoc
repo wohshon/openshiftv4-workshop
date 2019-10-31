@@ -75,7 +75,7 @@ image::ocp4-operators-etcd-install.png[image]
   - Automatic
 
 
-image::ocp4-operators-etcd-subscribe.png[image]
+image::ocp4-operators-subscribe.png[image]
 
 
 - After a few moments, you will see the etcd operator listed under `Installed Operators` 
