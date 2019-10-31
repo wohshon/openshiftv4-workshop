@@ -1,5 +1,7 @@
 [[scaling-an-openshift4-cluster]]
-= Scaling an OpenShift 4 Cluster
+
+
+= Scaling an OpenShift 4 Cluster - this Lab will be done as a demonstration by the Instructor if time permits
 
 == Scaling an OpenShift 4 Cluster
 
