@@ -22,21 +22,6 @@ For more information about SCL, see:
 
 - https://access.redhat.com/documentation/en-us/red_hat_software_collections/3/
 
-=== Getting a Red Hat Developer's Account
-
-- You need a Red Hat Developer's account to grab the service account user name and
-token to download the UBI base images. It is free. :-) You can also use the
-unauthenticated registry while it is still available.
-  * Register and create account at https://developers.redhat.com
-  * Login to https://developers.redhat.com
-  * Go to https://access.redhat.com/terms-based-registry/
-  * Click `New Service Account` to create your registry service account
-  * Enter your unique service account label to the `Name` and `Description`
-  * Click `Create`
-  * Click to `OpenShift Secret`
-  image::ocp4-registry-token.png[image]
-
-
 
 === Logging in
 
@@ -74,11 +59,11 @@ $ oc new-project buildimage-Username
 You can build your container image locally via podman or docker CLI with
 similar steps as shown below.
 
-NOTE: Below steps are not for this lab. It is just an example how you would build
+NOTE: Below steps are NOT for this lab. It is just an example how you would build
 an image locally.
 
 ....
-$ git clone https://github.com/flozanorht/testphp-ubi.git
+$ git clone https://github.com/wohshon/testphp-ubi.git
 $ cd testphp
 $ sudo podman login -u <your service account name> -p <your service account token>
 $ sudo podman build -t php-ubi .
@@ -98,59 +83,26 @@ $ sudo podman rm hello
 With OpenShift, we will be building the container image, deploy the container as
 an application, and ready to be consume.
 
-- Download your service account from https://access.redhat.com/terms-based-registry/ as an OpenShift secret as shown in the previous section.
-- Save the secret yaml file to your local filesystem as my-service-account-pull-secret.yaml
-- Login to the CLI terminal and execute the following
-- Create a secret from the file you downloaded from last step.
-
-NOTE: If you are using the web terminal, you will have to create a file with the
-same content of the secret file in your web terminal.
-You can reference the following steps if you are not familiar with a Linux CLI environment
-
-....
-$ nano secret.yaml`
-....
-
-* You will see a editor for the file. Copy the contents from your secret yaml file, Hit `Crtl-Shift-V` in the editor to paste the contents in.
-
-image::ocp4-nano.png[image]
-
-
-* `Crtl-X` to save the file, when prompted, enter `Y` to confirm, Hit `Enter` to confirm the filename. 
-* This should exit the editor and you can do a `cat secret.yaml` to confirm the file has been saved correctly
-
-
-
-....
-$ oc project buildimage-Username
-$ oc create -f my-service-account-pull-secret.yaml
-....
-
-* Link that secret to your project's builder service account. Your secret name may be different from the one listed.
-
-- run ```oc secrets link builder <secret name>``` as shown in the example below
-
-....
-
-[~] $ oc get secrets
-NAME                              TYPE                                  DATA
-AGE
-12182981-shannachan-pull-secret   kubernetes.io/dockerconfigjson        1
-
-
-[~] $ oc secrets link builder 12182981-shannachan-pull-secret
-....
-
-NOTE: Make sure your secret name matches the command to link to the service account.
 
 
 - Create an application via the Dockerfile
-
+- Make sure you are in the right project
 ....
-[~] $ oc new-app --name hello https://github.com/piggyvenus/testphp-ubi.git
---> Found Docker image c096c0d (5 weeks old) from registry.redhat.io for "regis
-try.redhat.io/ubi7/ubi"
+[~] $ oc project buildimage-user01
+Now using project "buildimage-user01" on server "https://api.cluster-dbs-ad12.dbs-ad12.example.opentlc.com:6443".
+....
 
+- We will use the `oc new-app` command to deploy an application based on a Dockerfile.
+- Based on the url provided, the command looks up to github repository where a Dockerfile is hosted; an image based on the Dockerfile instructions will be built and pushed into the integrated image registry on OpenShift. 
+
+- To begin deployment, run the following command.
+....
+[~] $ oc new-app --name hello https://github.com/wohshon/testphp-ubi.git
+....
+
+- You will see output similar to the following
+....
+--> Found Docker image 22ba711 (3 weeks old) from registry.access.redhat.com for "registry.access.redhat.com/ubi7/ubi"
     Red Hat Universal Base Image 7
     ------------------------------
     The Universal Base Image is designed and engineered to be the base layer fo
@@ -188,7 +140,7 @@ h may not be permitted by your cluster administrator
 ....
 
 - Wait for the build to finish
-
+- You can run the following `oc logs -f bc/hello` command to see the output of the build process. (bc is the build configuration object of this app we are deploying)
 ....
 [~] $ oc logs -f bc/hello
 Cloning "https://github.com/piggyvenus/testphp-ubi.git" ...
@@ -214,7 +166,7 @@ Push successful
 ....
 
 - Wait for the application pod to be ready and Running
-
+- Run `oc get pods` to check the status
 ....
 [~] $ oc get pods
 NAME             READY   STATUS      RESTARTS   AGE
@@ -224,14 +176,14 @@ hello-1-deploy   0/1     Completed   0          43s
 ....
 
 - Create a route for the application's service
-
+- This creates an external facing url , `oc expose svc hello`
 ....
 [~] $ oc expose svc hello
 route.route.openshift.io/hello exposed
 ....
 
-- Test the application using route
-
+- Test the application using the route
+- Use `oc get route` to get the url, and either test the url in a browser or using the `cURL` command.
 ....
 [~] $ oc get route
 NAME    HOST/PORT                                                   PATH   SERV
