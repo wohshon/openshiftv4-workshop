@@ -80,12 +80,12 @@ $ sudo podman rm hello
 
 ==== Build container Image on Openshift
 
-With OpenShift, we will be building the container image, deploy the container as
-an application, and ready to be consume.
+With OpenShift, we will be building the container image and deploying the container as
+an application by referencing a Dockerfile https://docs.docker.com/engine/reference/builder/[What is a Docker file]
 
+NOTE: To simplify the lab, we are using a image repository that is due to be decommissioned. Going forward, you should register a Red Hat Developer Account at  https://developers.redhat.com. This will allow you to obtain tokens (https://access.redhat.com/terms-based-registry/) to authenticate to the latest image registry.
 
-
-- Create an application via the Dockerfile
+- Let's get started to create an application via the Dockerfile
 - Make sure you are in the right project
 ....
 [~] $ oc project buildimage-user01
@@ -94,6 +94,8 @@ Now using project "buildimage-user01" on server "https://api.cluster-dbs-ad12.db
 
 - We will use the `oc new-app` command to deploy an application based on a Dockerfile.
 - Based on the url provided, the command looks up to github repository where a Dockerfile is hosted; an image based on the Dockerfile instructions will be built and pushed into the integrated image registry on OpenShift. 
+
+- Feel free to examine the Dockerfile at the github repo to understand how the image is built.
 
 - To begin deployment, run the following command.
 ....
