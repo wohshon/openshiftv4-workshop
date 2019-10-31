@@ -5,16 +5,16 @@ config:
       value: openshift
     - name: CONSOLE_ADDRESS
       desc: HTTP address of the OpenShift console
-      value: https://console-openshift-console.apps.cluster-sgp-f244.sgp-f244.example.opentlc.com/
+      value: https://console-openshift-console.apps.cluster-dbs-ad12.dbs-ad12.example.opentlc.com/
     - name: APPS_ADDRESS
       desc: HTTP address suffix of apps deployed on OpenShift
-      value: apps.cluster-sgp-06e3.sgp-06e3.example.opentlc.com
+      value: apps.cluster-dbs-ad12.dbs-ad12.example.opentlc.com
     - name: GET_STARTED_CLI_URL
       desc: URL to documentation to configure CLI
       value: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/
     - name: API_URL
       desc: URL to API server
-      value: https://api.cluster-sgp-f244.sgp-f244.example.opentlc.com:6443/
+      value: https://api.cluster-dbs-ad12.dbs-ad12.example.opentlc.com:6443/
     - name: NEXUS_URL
       desc: URL to Nexus repository
       value: http://nexus-workshop.apps.cluster-farmers-b621.farmers-b621.open.redhat.com/repository/maven-public/

@@ -1,7 +1,6 @@
 [[using-operatorhub]]
-= Extensions to OpenShift using OperatorHub
+= Operators and Operator Hub
 
-== Extensions to OpenShift using OperatorHub
 
 In this lab you will learn how to use operatorhub and operators.
 
@@ -15,9 +14,12 @@ Within OperatorHub, you will find three sets of Operators available to you:
   - Certified Partners - partners that have certified their applications for OpenShift and have established a mutual support SLA with Red Hat, in order to provide you with the best experience.
   - Community - a set of curated Operators built by the Kubernetes community and work well with the Operator Lifecycle Management software already installed on your cluster.
 
-In this example, we're going to deploy Couchbase through the Operator framework in OpenShift 4. Couchbase is a powerful NoSQL database implementation.
+In this example, we're going to deploy a `etcd` cluster through the Operator framework in OpenShift 4. `etcd` is a distributed key-value store.
+
+NOTE: The first part of the Lab that involves the installation of a Operator will be executed for you prior to this lab as it needs escalated access rights . You can still reference the steps to see the ease of installation. In the 2nd part of the lab, you will be installing a etcd cluster using the operator that has been provisioned.
 
 === Create a Project
+
 
 Before you get started, create a project for what you're about to do with Couchbase.
 You can either do it from the command line:
@@ -25,12 +27,15 @@ You can either do it from the command line:
 IMPORTANT: Please replace *Username* with your username
 
 ```
-$ oc new-project mycouchbase-Username
-Now using project "mycouchbase-Username" on server "{{API_URL}}"
+$ oc new-project operators-user01
+Now using project "operators-user01" on server "{{API_URL}}"
 ```
 or create from console
 
-=== Installing an Extension
+
+=== Installing an Operator
+
+NOTE: This section is just for you to better understand how an `operator` can be installed. As you do not have the admin role, you will not be able to carry out the steps in this section.
 
 - Installing your first Operator is best done through the user interface, but
 can also be driven by the command line. Let's complete this section using the
@@ -40,22 +45,41 @@ web console:
 
 - On the left-hand side menu select 'Catalog' --> 'OperatorHub':
 
-image::operatorhub.png[image]
+image::ocp4-operator-hub.png[image]
 
 NOTE: Only users with cluster admin privileges can see the Operator Hub interface.
 
-- At the top of the page, in the Project selector, choose `mycouchbase-Username`
-from the dropdown.
-
-- Search, or browse to the `Couchbase` Operator and select it by clicking on it.
+- Search, or browse to the `etcd` Operator and select it by clicking on it.
 
 - The description lays out the notable features of the Operator. Click `Install`
 to deploy the Operator on to the cluster. It may take several moments after
 clicking "Install" before the Subscription page shows up:
 
-image::couchbaseOperator.png[image]
+image::ocp4-operators-etcd.png[image]
 
-- Select `mycouchbase-Username` as the specific namespace
+- Select the etcd operator, accept the warning message that states this operator is a community supported component.
+
+- Click `install` to proceed installation
+ 
+image::ocp4-operators-etcd-install.png[image]
+
+- On the next screen, select the options as listed on the image.
+
+- `Installation Mode`
+  - All namespaces on the cluster (default)
+
+- `Update Channel`
+  - clusterwide-alpha
+
+- `Approval Strategy`
+  - Automatic
+
+
+image::ocp4-operators-etcd-subscribe.png[image]
+
+
+- After a few moments, you will see the etcd operator listed under `Installed Operators` 
+image::ocp-operators-etcd-installed.png[image]
 
 The installation process involves "subscribing" to an Operator from the hub.
 This subscription mechanism is how OpenShift learns about updates to the operator.
@@ -83,283 +107,136 @@ apply updates. In the future, when Couchbase releases an updated operator to the
 "preview" channel, you can decide whether you want to approve each update, or
 have it happen automatically. Choose "Automatic" for now.
 
-- Clicking `Subscribe`, the Couchbase entry will now show that it is "Installed":
 
-image::couchbaseOperator.png[image]
 
-IMPORTANT: while the Operator Hub page indicates that the operator is "installed",
-really it is indicating that the operator is configured to be installed. It may
-take several minutes for OpenShift to pull in the operator to the cluster.
-You can check on the status of this operator with the following command:
-
-```
-$ oc get pod --all-namespaces | grep -i couch
-mycouchbase                                             couchbase-operator-dd5fff557-chg5p
- 1/1     Running     0          27s
-openshift-marketplace                                   installed-certified-mycouchbase-77cfc9c4b5-wk48x
- 1/1     Running     0          46s
-```
-
-- You will likely see the Couchbase operator pod in ContainerCreating status if
-you look very soon after finishing the installation/subscription process.
-
-=== Using Secrets
-
-The Couchbase operator is capable of installing and managing a Couchbase cluster for you. But, before it can do that, it has a prerequisite for a Kubernetes secret that it can use to configure the username and password for the cluster. You have a couple of ways to create this secret.
-
-Firstly can you can do it via the Web Console:
-
-- Open the OpenShift web console
-
-- Navigate to "Workloads" --> "Secrets".
-
-- Make sure the Project selector is set to `mycouchbase-Username` at the top.
-
-- Now click the "Create" selector and choose "Key/Value Secret":
-
-image::ocp4-secret.png[image]
-
-- Click "+ Add" at the upper right-hand area of the panel, and then choose
-"Import YAML". Paste the following YAML into the form (the username is
-"couchbase" and the password is "securepassword"):
-
-```
-
-apiVersion: v1
-data:
-  password: c2VjdXJlcGFzc3dvcmQ=
-  username: Y291Y2hiYXNl
-kind: Secret
-metadata:
-  name: cb-example-auth
-  namespace: mycouchbase-Username
-type: Opaque
-
-```
-
-Notes: Replace the *Username* to your username
-
-- Click create:
-
-image::ocp4-import-secret.png[image]
-
-**Alternatively**, you can create the secret directly using the following command:
-
-```
-$ oc create -f https://raw.githubusercontent.com/openshift/training/master/assets/cb-example-auth.yaml
-```
-Ultimately, you want a secret with the username couchbase and the password securepassword (both examples above use that).
 
 === Using an Installed Operator
 
-Regular users will use the "Developer Catalog" menu to add shared apps, services,
-or source-to-image builders to projects. Let's explore that interface and deploy
-a Couchbase cluster from our newly created Operator:
+Regular users will use the "Administrator" view to use the `operators` functions.
 
-- Navigate `Catalog` --> `Developer Catalog` on the left-hand side.
+- Navigate to `Administrator` on the top left hand menu.
 
-image::dev-catalog.png[image]
+image::ocp4-role-dropdown.png[image]
 
-- At the top of the page, again make sure you select `mycouchbase-Username` from the Project dropdown.
+- Choose `Operators` --> `Installed Operators` on the left hand menu
 
-- You should see that the Couchbase operator is available. If you choose a
-different Project, you should also notice that the Couchbase operator is not
-available in other Projects.
+- Make sure you are in the correct project `operators-<Username>`, as indicated on the project drop-down at top of the screen
 
-- Click on the `Couchbase Cluster` tile, which is a capability that the Operator
-has extended our OpenShift cluster to support. Operators can expose more than
-one capability. For example, the MongoDB Operator exposes three common
-configurations of its database (and you would see three different MongoDB tiles).
+- You should see the etcd operator is available, and there are 3 APIs exposed for you to use to manage a etcd cluster. 
+image::ocp4-operator-installed-operator.png[image]
 
-- Click `Create` to deploy an instance of Couchbase
 
-image::couchdbCluster.png[image]
+- Click on the `etcd` tile (under the Name column), to see the detailed info of this operator.
 
-- The YAML editor has been pre-filled with a set of defaults for the resulting
-Couchbase cluster. One of those defaults is a reference to the Secret you
-created earlier:
+- Click on the `Create Instance` under the `etcd Cluster` column to start deploying a etcd cluster.
+ 
+image::ocp4-operators-details.png[image]
 
-image::couchdb-cr.png[image]
+- You will be led to the page where a definition of the etcd cluster to be deployed is display (in YAML form).
 
-NOTE: version is 5.5.4-1 instead of the default. (at the bottom)
+- The YAML editor has been pre-filled with a set of defaults for the resulting cluster.
 
-- At this point we're able to change some of the Couchbase deployment parameters
-to our liking. Set the replicas field (under .spec.buckets) to 3, so our
-Operator sets up a highly available cluster for us. Your YAML should look like
-the following:
+- You may change the values at this juncture should you need to, like updating the size of the cluster, version of etcd.
 
-```
-apiVersion: couchbase.com/v1
-kind: CouchbaseCluster
-metadata:
-  name: cb-example
-  namespace: mycouchbase-Username
-spec:
-  authSecret: cb-example-auth
-  baseImage: registry.connect.redhat.com/couchbase/server
-  buckets:
-    - conflictResolution: seqno
-      enableFlush: true
-      evictionPolicy: fullEviction
-      ioPriority: high
-      memoryQuota: 128
-      name: default
-      replicas: 3
-      type: couchbase
-...
-```
+- For this lab, you may just clear on `Create` to proceed installing.
 
-- Click "Create". Afterwards, you will be taken to a list of all Couchbase
-instances running with this Project and should see the one you just created
-has a status of "Creating":
 
-image::creatingCouchdb.png[image]
+image::ocp4-operators-create-yaml.png
+
 
 === View the Deployed Resources
 
-- Navigate to the Couchbase Cluster that was deployed by clicking `cb-example`
-- Click on the `Resources` tab. This collects all of the objects deployed and
-managed by the Operator. From here you can ultimately view Pod logs to check on
-the Couchbase Cluster instances.
+- After creating the cluster, you will be led to the overview page showing the status of the cluster you just deployed.
 
-- If for some reason you had navigated away from the page after creating your
-Couchbase cluster, you can get back here by clicking `Catalog` -> `Installed
-Operators` -> `Couchbase Cluster` -> cb-example.
+image::ocp4-operarots-created.png[image]
 
-- Create route from cb-example service
+- Navigate to the Etcd Cluster that was deployed by clicking `example`
+- Under the `Overview` tab, `Member Status` you may see the number of etcd nodes that are started (It may take a while for it to reach 3)
+- You can click on the `Resources` tab to look at the the objects deployed by the Operator (Pods etc)
+- You should see 3 pods created for etcd cluster
+image::ocp4-operarots-created-1.png[image]
 
-```
-$ oc project mycouchbase-Username
-$ oc expose service cb-example
-route.route.openshift.io/cb-example exposed
-```
+=== Optional exercise - interating with the etcd cluster
 
-- A route is created
+- You can test out the cluster you created by creating key value entries in them.
+- e.g.: 
+NOTE: `oc rsh` allows you to open a remote shell into the pods.
 
 ```
-$ oc get route
-NAME         HOST/PORT                                                         PATH   SERVICES     PORT        TERMINATION   WILDCARD
-cb-example   cb-example-mycouchbase-Username.apps.cluster-3e5f.sandbox580.opentlc.com          cb-example   couchbase                 None
-```
+# oc project operators-user01
+$ oc get pods
+NAME                 READY   STATUS    RESTARTS   AGE
+example-7x78p5rhz6   1/1     Running   0          24m
+example-f4lx2bkkk7   1/1     Running   0          24m
+example-hcntqx78jt   1/1     Running   0          24m
+$ oc rsh example-7x78p5rhz6
 
-- Navigate to `Networking` --> `Routes`
-- Click on the URL under `LOCATION`
-- Login with the user `couchbase` and the password `securepassword` (these were
-in your secret). If you used different credentials, make sure you put in the
-right ones:
-
-image::couchdb.png[image]
-
-- You should see 3 nodes listed for each function. We'll dynamically modify this
-in the next section.
-
-=== Re-Configure the Cluster with the Operator
-
-- Click the Servers link on the left-hand side, it should look like the following:
-
-image::couch-server.png[image]
-
-- As the Operator scales up more Pods, they will automatically join and appear in
-the dashboard. Next, edit your cb-example Couchbase instance to have a server
-size of 4 instead of 3. You can navigate back to the installed instances of
-Couchbase via the web console, or you can use:
+~ $ etcdctl set hello world
+world
+~ $ etcdctl update hello world!!!
+world!!!
+~ $ etcdctl get hello
+world!!!
+~ $ exit
 
 ```
-$ oc project mycouchbase-Username
-(if you are not already in your project)
-$ oc edit couchbaseclusters.couchbase.com/cb-example
-(Opens in vi)
-```
+You can `oc rsh` into another pod and you can see that the value has been replicated across
 
-- Ensure that your .spec.servers section of the yaml looks like the following-
 
-```
-  servers:
-  - name: all_services
-    services:
-    - data
-    - index
-    - query
-    - search
-    - eventing
-    - analytics
-    size: 4
-```
 
-- When you've updated your yaml, save and exit your editor:
+=== Optional exercise - Re-Configure the Cluster with the Operator
+
+- You can change the cluster configurations by going to the `YAML` tab and make modifications to the cluster.
+- Some suggestions:
+
+  - change the size to 1
+  - change the version to 3.2.12
+  - go back to the operator api to create a new cluster (you need to use a new name), be mindful that there may be restrictions on the total number of pods in your namespace when you spin up additional clusters
+
 
 ```
-couchbasecluster.couchbase.com/cb-example edited
+apiVersion: etcd.database.coreos.com/v1beta2
+kind: EtcdCluster
+metadata:
+  annotations:
+    etcd.database.coreos.com/scope: clusterwide
+  creationTimestamp: '2019-10-31T00:15:04Z'
+  generation: 11
+  name: example
+  namespace: operators-user01
+  resourceVersion: '2971222'
+  selfLink: >-
+    /apis/etcd.database.coreos.com/v1beta2/namespaces/operators-user01/etcdclusters/example
+  uid: 7d01b459-fb73-11e9-acc0-0a16fd1df84c
+spec:
+  repository: quay.io/coreos/etcd
+  size: 3
+  version: 3.2.13
+status:
+  clientPort: 2379
+  conditions:
+    - lastTransitionTime: '2019-10-31T00:16:01Z'
+      lastUpdateTime: '2019-10-31T00:16:01Z'
+      reason: Cluster available
+      status: 'True'
+      type: Available
+    - lastTransitionTime: '2019-10-31T00:49:58Z'
+      lastUpdateTime: '2019-10-31T00:49:58Z'
+      message: 'Current cluster size: 2, desired cluster size: 3'
+      reason: Scaling up
+      status: 'True'
+      type: Scaling
+  currentVersion: 3.2.13
+  members:
+    ready:
+      - example-7x78p5rhz6
+      - example-hcntqx78jt
+  phase: Running
+  serviceName: example-client
+  size: 3
+  targetVersion: ''
 ```
-
-A few things will happen:
-
-  * The Operator will detect the difference between the desired state and the current state
-  * A new Pod will be created and show up under "Resources"
-  * The Couchbase dashboard will show 4 instances once the Pod is created
-  * The Couchbase dashboard will show that the cluster is being rebalanced
-
-- Your cluster dashboard should dynamically update to show the progress:
-
-- After the cluster is scaled up to 4, try scaling back down to 3:
-
-```
-$ oc edit couchbaseclusters.couchbase.com/cb-example
-(Opens in vi)
-```
-
-- If you watch the dashboard closely, you will see that Couchbase has
-automatically triggered a re-balance of the data within the cluster to reflect
-the new topology of the cluster. This is one of many advanced feautres embedded
-within applications in OperatorHub to save you time when administering your
-workloads.
-
-=== Delete the Couchbase Instance
-
-After you are done, delete the cb-example Couchbase instance and the Opeator
-will clean up all of the resources that were deployed. Remember to delete the
-Route that we manually created as well. Remember to delete the Operator instance
-and not to delete the Pods or other resources directly -- the operator will
-immediately try to fix that thinking that there's a problem!
-
-- Navigate to `Catalog` -> `Installed Operators` on the left-hand side
-- Click `Couchbase Operator`
-
-- Click `Couchbase Cluster` tab
-
-- On the right of the `cb-example` line, click on the drop down (3 dots)
-and select "Delete Couchbase Cluster":
-
-- Click `Delete`
-
-image::delete-couchdb.png[image]
-
-- Navigate to `Networking` -> `Routes`
-
-- On the drop-down menu (3 dots) to the right of our `cb-example` route, select `Delete Route`:
-
-image::ocp4-delete-route.png[image]
-
-- Click `Delete`
-- After you delete the cb-example cluster, if you look at the pods quickly
-you'll see the pods terminating, otherwise you'll likely only see the Operator
-pod running:
-
-```
-$ oc get pod -n mycouchbase-Username
-NAME                                  READY   STATUS    RESTARTS   AGE
-couchbase-operator-56c798b7c6-d7wdc   1/1     Running   0          54m
-```
-- The Operator Pod remains, that's because there's still a Subscription for the
-Couchbase operator in this Project. You can delete the Subscription (and, thus,
-the Pod) by going to "Operator Management" -> "Operator Subscriptions". There you
-can click the 3 dots and remove the Subscription for the Couchbase Operator in
-the mycouchbase Project. Now there should be no pods, and you can also delete
-the project if you wish.
-
-image::ocp4-delete-sub.png[image]
-
 
 Congratulations!! You now know how to install operators and deploy application
 via OperatorHub. From more information about operator, see
-https://docs.openshift.com/container-platform/4.1/applications/operators/olm-what-operators-are.html for more details.
+https://docs.openshift.com/container-platform/4.2/applications/operators/olm-what-operators-are.html for more details.
