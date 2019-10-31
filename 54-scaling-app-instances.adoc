@@ -262,7 +262,7 @@ idled.
 - Navigate to `Advanced` --> `Projects`
 - Click onto `hello` dc to pull out the side menu.
 
-image::ocp4-dev-idle.png.png[image]
+image::ocp4-dev-idle.png[image]
 
 At this point the application is idled, the pods are not running and no
 resources are being used by the application. This doesn't mean that the
