@@ -156,11 +156,11 @@ image::ocp4-operarots-created.png[image]
 - You should see 3 pods created for etcd cluster
 image::ocp4-operarots-created-1.png[image]
 
-=== Optional exercise - interating with the etcd cluster
+=== Optional exercise - interacting with the etcd cluster
 
 - You can test out the cluster you created by creating key value entries in them.
 - e.g.: 
-NOTE: `oc rsh` allows you to open a remote shell into the pods.
+NOTE: `oc rsh` allows you to open a remote shell into the pods. Your pod names will differ from the example below
 
 ```
 # oc project operators-user01
