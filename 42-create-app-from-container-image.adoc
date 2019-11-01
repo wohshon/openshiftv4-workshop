@@ -81,7 +81,7 @@ image::ocp4-dev-deploy-image-3.png[image]
 - Click on the `Deployment Configuration` hyperlink on the line of text.
 - Add `OC_VERSION` and `4.2` in the  `Environment Variable` section
 
-image::ocp4-dev-deploy-image-3.png[image]
+image::images/ocp4-dev-deploy-image-config.png[image]
 
 - Click `Create` to start deploying your image.
 
