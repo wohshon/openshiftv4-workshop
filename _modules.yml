@@ -44,5 +44,5 @@ modules:
   44-scaling-an-openshift4-cluster:
     name: Scaling OpenShift4 Cluster - Demo Only
   51-cicd-short:
-    name: Continuous Integration , Deployment
+    name: Continuous Integration and Deployment
 
