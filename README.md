@@ -87,8 +87,15 @@ done
 
 oc create secret generic workshop-htpass-secret --from-file=htpasswd=./users.htpasswd -n openshift-config
 
-//TODO, patch command to append to the Oauth Object
+//patch command to append to the Oauth Object
 
+```
+oc patch Oauth/cluster --patch '{"spec":{"identityProviders": [{"htpasswd": {"fileData": {"name": "workshop-htpass-secret"}},              "mappingMethod": "claim","name": "workshop_htpasswd_provider","type": "HTPasswd"}]}}' --type merge
+```
+
+or in yaml format
+
+```
     -  htpasswd:
         fileData:
           name: workshop-htpasswd-secret
