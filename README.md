@@ -91,7 +91,7 @@ Create the htpasswd login
 ```
 oc create secret generic workshop-htpass-secret --from-file=htpasswd=./users.htpasswd -n openshift-config
 
-oc patch Oauth/cluster --patch '{"spec":{"identityProviders": [{"htpasswd": {"fileData": {"name": "workshop-htpass-secret"}},"mappingMethod": "claim","name": "workshop_htpasswd_provider","type": "HTPasswd"}]}}' --type merge
+oc patch Oauth/cluster --patch '{"spec":{"identityProviders": [{"htpasswd": {"fileData": {"name": "workshop-htpasswd-secret"}},"mappingMethod": "claim","name": "workshop_htpasswd_provider","type": "HTPasswd"}]}}' --type merge
 
 ```
 
