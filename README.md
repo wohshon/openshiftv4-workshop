@@ -85,15 +85,17 @@ for value in $( eval echo {1..$NumUsers} )
         oc adm policy add-cluster-role-to-user basic-user $uname
 done
 
+```
+Create the htpasswd login
+
+```
 oc create secret generic workshop-htpass-secret --from-file=htpasswd=./users.htpasswd -n openshift-config
 
-//patch command to append to the Oauth Object
+oc patch Oauth/cluster --patch '{"spec":{"identityProviders": [{"htpasswd": {"fileData": {"name": "workshop-htpass-secret"}},"mappingMethod": "claim","name": "workshop_htpasswd_provider","type": "HTPasswd"}]}}' --type merge
 
 ```
-oc patch Oauth/cluster --patch '{"spec":{"identityProviders": [{"htpasswd": {"fileData": {"name": "workshop-htpass-secret"}},              "mappingMethod": "claim","name": "workshop_htpasswd_provider","type": "HTPasswd"}]}}' --type merge
-```
 
-or in yaml format
+or in yaml format, to copy and paste into the console
 
 ```
     -  htpasswd:
